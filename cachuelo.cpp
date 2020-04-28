@@ -1,114 +1,172 @@
 #include <iostream>
+#include <math.h>
+#include <string>
+#include <vector>
 #include <string.h>
-int cont;
+#include <list>
 using namespace std;
-bool productoAND(bool a, bool b){
-	bool resultado;
-	resultado=a*b;
-	return resultado;
-}
-bool sumaOR(bool a, bool b){
-	bool resultado;
-	resultado=a+b;
-	return resultado;
-}
-bool negacion(bool n){
-	n=!n;
-	return n;
-}
-bool operacion(bool A, bool B, char operando){
-	bool resultado;
-	switch(operando){
-		case '^':
-			resultado=productoAND(A,B);
-		break;
-		case 'v':
-			resultado=sumaOR(A,B);
-		break;		
+string productoAND(char a, char b){
+	if(a == b and a == '1'){
+		return "1";
 	}
-	return resultado;
+	else{
+		return "0";
+	}
 }
-bool tabladeverdad(char ecuacion[], int posicion[],int longitud,int numparentesis){
-	int factores=0;
-	for(int i=0;i<numparentesis-1;i++){
-		factores=(posicion[i+1]-posicion[i])
-		switch (factores){
-			case 4:
-				if
-			break;
-			case 5:
-			break;
-			case 6:
-			break;
+string sumaOR(char a, char b){
+	if(a == b and a == '0'){
+		return "0";
+	}
+	else{
+		return "1";
+	}
+}
+string negacion(char n){
+	if(n=='1'){
+		return "0";
+	}
+	if(n=='0'){
+		return "1";
+	}
+	
+}
+string aplicarnegacion(string termino){
+	string string1,string2,string3;
+	int n;
+	string caracter;
+	while(termino.find("'") != string::npos){
+		n=termino.find("'");
+		string1=termino.substr(0,n-1);
+		caracter=negacion(termino.at(n));
+		string2=termino.substr(n+1,termino.length()-n);
+		string1=string1+caracter;
+		termino=string1+string2;
 		}
-		cont=0;
-		if(ecuacion)
+	return termino;
+}
+int numvariables(string funcion){
+	int numvar=0;
+	if(funcion.find("X") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("Y") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("Z") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("W") != string::npos){
+		numvar++;
+	}
+	return numvar;
+}
+bool valoresdeverdad(int x, int y){
+	bool matriz[16][4];
+	int cont=8;
+	for(int j=0;j<4;j++){ 
+		for(int i=0;i<16;i++){ 
+			if(j+1<=cont){
+				matriz[i][j]=0;
+			}
+			else{
+				matriz[j][i]=1;
+			}
+		}
+	}
+	return matriz[y][4-x];
+}
+string binarizacion(string termino,int numvariables, int y){
+	for(int i=0;i<termino.length();i++){
+		if(termino.at(i)=='X'){
+			termino.at(i)=valoresdeverdad(numvariables,y);
+			numvariables--;
+		}
+		if(termino.at(i)=='Y'){
+			termino.at(i)=valoresdeverdad(numvariables,y);
+			numvariables--;;
+		}
+		if(termino.at(i)=='Z'){
+			termino.at(i)=valoresdeverdad(numvariables,y);
+			numvariables--;
+		}
+		if(termino.at(i)=='W'){
+			termino.at(i)=valoresdeverdad(numvariables,y);
+			numvariables--;
+		}
+	}
+	
+}
+string prioridadAND(string termino){
+	string string1,string2,string3;
+	int n;
+	string caracter;
+	while(termino.find("^") != string::npos){
+		n=termino.find("^");
+		string1=termino.substr(0,n-2);
+		caracter=productoAND(termino.at(n-2),termino.at(n+2));
+		string2=termino.substr(n+2,termino.length());
+		string1=string1+caracter;
+		termino=string1+string2;
 		
 	}
-	
+	return termino;
 }
-int contadordenegaciones(char funcion[]){
-	
+string resolverOR(string termino){
+	string string1,string2,string3;
+	string caracter;
+	int n;
+	while(termino.find("v") != string::npos){
+		n=termino.find("v");
+		string1=termino.substr(0,n-2);
+		caracter=sumaOR(termino.at(n-2),termino.at(n+2));
+		string2=termino.substr(n+2,termino.length());
+		string1=string1+caracter;
+		termino=string1+string2;
+		
+	}
+	return termino;
 }
-void mostrartabla
-void reemplazosegundonivel(char booleana){
-	bool reducciones[100];
-	reducciones[cont]=booleana;
+string operar(string termino, int numvar){
+	int y=0;
+	termino=binarizacion(termino,numvar,y);
+	termino=aplicarnegacion(termino);
+	termino=prioridadAND(termino);
+	termino=resolverOR(termino);
+	return termino;
+	}
+string separarterminos(string funcion){
+	int s,posicion1,posicion2,cont=0;
+	int n;
+	string string1,string2,termino;
+	n=numvariables(funcion);
 	
-	
-}
-void leerfuncion(char funcion[100]){
-	int s,j=0;
-	int terminos;
-	int posiciones[100];
-	printf("inserta tu frase plox: ");
-    gets(funcion);
-    s=strlen(funcion);
-    for(int i=0;i<s;i++){
-    	if(funcion[i]=='('){
-    		posiciones[j]=i;
-    		j++
-    	}
+	for(int i=0;i<funcion.length();i++){
+		if(funcion[i]=='('){
+    		posicion1=i;
+		}
 		if(funcion[i]==')'){
-    		posiciones[j]=i;
-    		j++
-    	}	
-    }
-	tabladeverdad(funcion[],posiciones[],s,j);
-}
+    		posicion2=i;
+		}
+		if(posicion2 != 0){
+			termino=funcion.substr(posicion1, posicion2);
+			funcion=funcion.substr(posicion2, funcion.length());
+			string1=operar(termino,n);
+			funcion=string1+funcion;
+		}
+	}
 
+	
+	return operar(funcion,n);
+}
+void leerfuncion(){
+	string ecuacion;
+	string respuesta;
+	printf("inserta tu frase plox: ");
+    getline(cin,ecuacion);
+    respuesta=separarterminos(ecuacion);
+    cout<<respuesta;
 }
 int main(){
-	bool
-	char funcion[100];
-	
-    leerfuncion(funcion);
-    return 0;
-    
-    return 0;
+	leerfuncion();
+	return 0;
 }
-
-
-if(funcion[i]=='('){
-    	/*if(funcion[i+4]==')'||funcion[i]=='e'){*
-    		switch(funcion[i+2]){
-    		case '^':
-    			reducciones[j]=productoAND(funcion[i+1],funcion[i+3]);
-    			if()
-    			
-    			 j++;
-    		break;
-    		case 'v':
-    			reducciones[j]=sumaOR(funcion[i+1],funcion[i+3]);
-    			cout<<reducciones[j];
-    			j++;
-    		break;
-    		case ''':
-    			reducciones[j]=negacion(funcion[i+1]);
-    			cout<<reducciones[j];
-    			j++;
-    		break;
-    		
-    			
-		}
-		/*}*/
