@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <math.h>
 #include <string>
@@ -60,41 +61,47 @@ int numvariables(string funcion){
 	}
 	return numvar;
 }
-bool valoresdeverdad(int x, int y){
-	bool matriz[16][4];
-	int cont=8;
-	for(int j=0;j<4;j++){ 
-		for(int i=0;i<16;i++){ 
-			if(j+1<=cont){
-				matriz[i][j]=0;
+string valoresdeverdad(int cont,int restantes,int x,int y){
+	string matriz[16][4];
+	for(int s=0;s<pow(2,cont);s++){
+
+		for(int i=0;i<pow(2,restantes);i++){ 
+			if(i<pow(2,restantes)/2){
+				matriz[i][x]=0;
 			}
 			else{
-				matriz[j][i]=1;
+				matriz[i][x]=1;
 			}
 		}
 	}
-	return matriz[y][4-x];
+	return matriz[y][x];
 }
 string binarizacion(string termino,int numvariables, int y){
+	int cont=0,restantes;
+	restantes=numvariables;
 	for(int i=0;i<termino.length();i++){
 		if(termino.at(i)=='X'){
-			termino.at(i)=valoresdeverdad(numvariables,y);
+			termino.at(i)=valoresdeverdad(cont,restantes,0,y);
 			numvariables--;
+			cont++;
 		}
 		if(termino.at(i)=='Y'){
-			termino.at(i)=valoresdeverdad(numvariables,y);
-			numvariables--;;
+			termino.at(i)=valoresdeverdad(cont,restantes,1,y);
+			numvariables--;
+			cont++;
 		}
 		if(termino.at(i)=='Z'){
-			termino.at(i)=valoresdeverdad(numvariables,y);
+			termino.at(i)=valoresdeverdad(cont,restantes,2,y);
 			numvariables--;
+			cont++;
 		}
 		if(termino.at(i)=='W'){
-			termino.at(i)=valoresdeverdad(numvariables,y);
+			termino.at(i)=valoresdeverdad(cont,restantes,3,y);
 			numvariables--;
+			cont++;
 		}
 	}
-	
+	return termino;
 }
 string prioridadAND(string termino){
 	string string1,string2,string3;
@@ -126,8 +133,11 @@ string resolverOR(string termino){
 	}
 	return termino;
 }
-string operar(string termino, int numvar){
-	int y=0;
+string reduccion(string termino){
+	
+}
+string operar(string termino, int numvar,int y){
+	termino=reduccion(termino);
 	termino=binarizacion(termino,numvar,y);
 	termino=aplicarnegacion(termino);
 	termino=prioridadAND(termino);
@@ -150,13 +160,13 @@ string separarterminos(string funcion){
 		if(posicion2 != 0){
 			termino=funcion.substr(posicion1, posicion2);
 			funcion=funcion.substr(posicion2, funcion.length());
-			string1=operar(termino,n);
+			string1=operar(termino,n,y);
 			funcion=string1+funcion;
 		}
 	}
 
 	
-	return operar(funcion,n);
+	return operar(funcion,n,y);
 }
 void leerfuncion(){
 	string ecuacion;
