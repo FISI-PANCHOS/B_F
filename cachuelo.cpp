@@ -63,17 +63,18 @@ int numvariables(string funcion){
 }
 char valoresdeverdad(int cont,int restantes,int x,int y){
 	char matriz[16][4];
+	int i=0;
 	for(int s=0;s<pow(2,cont);s++){
 
-		for(int i=0;i<pow(2,restantes);i++){ 
 			if(i<pow(2,restantes)/2){
 				matriz[i][x]='0';
 			}
 			else{
 				matriz[i][x]='1';
 			}
+			i++;
 		}
-	}
+	
 	return matriz[y][x];
 }
 string binarizacion(string termino,int numvariables, int y){
@@ -185,20 +186,21 @@ void llenarmatrices(string ecuacion){
 	int n;
 	n=numvariables(ecuacion);
 	string matriz[16][5];
-	for(int cont=0;cont<n;cont++){
-		for(int s=0;s<pow(2,cont);s++){
-			for(int j=0;j<n;j++){
-				for(int i=0;i<pow(2,n-cont);i++){ 
-				if(i<pow(2,n-cont)/2){
-				matriz[i][j]='0';
+	int i=0,cont=0;
+	while(cont<n){
+		for(int j=0;j<n;j++){
+			for(int i=0;i<pow(2,n);i++){
+				for(int s=0;s<pow(2,cont);s++){
+					for(int contador=0;contador<pow(2,n-cont);contador++){
+						
+					}
+					
+				}
+			
 			}
-				else{
-				matriz[i][j]='1';
-			}
-	}
-	}
-	}
-	
+			cont++;
+		}
+
 	}
 	for(int cont2=0;cont2<pow(2,n);cont2++){
 		matriz[cont2][n]=separarterminos(ecuacion,cont2);
