@@ -32,17 +32,18 @@ string negacion(char n){
 	
 }
 string aplicarnegacion(string termino){
-	string string1,string2,string3;
+	string string1,string2,caracter;
 	int n;
-	string caracter;
 	while(termino.find("'") != string::npos){
 		n=termino.find("'");
 		string1=termino.substr(0,n-1);
-		caracter=negacion(termino.at(n));
+		caracter=negacion(termino.at(n-1));
 		string2=termino.substr(n+1,termino.length()-n);
 		string1=string1+caracter;
 		termino=string1+string2;
+		termino=aplicarnegacion(termino);
 		}
+		
 	return termino;
 }
 int numvariables(string funcion){
@@ -153,14 +154,20 @@ string resolverOR(string termino){
 	return termino;
 }
 string reduccion(string termino){
-	int n;
-	string copia;
+	int a=0,n,cont=0;
+	string lista="XYZW";
 	string string1,caracter;
 	if(termino.length()>1){
+		for(int a=0;a<4;a++){
+			cont=0;
     for(int i=0;i<termino.length();i++){
-    	if(termino.find("'") != string::npos){
-			n=termino.find("'");
-			if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v' and (termino.at(i)==termino.at(n-1) or termino.at(i+2)==termino.at(n-1) )){
+    	
+    	if(termino.at(i)==lista.at(a) and termino.at(i)!='^' and termino.at(i)!='v' ){	
+    		cont++;
+    		if(cont>1){
+    			if(termino.find("'") != string::npos){
+				n=termino.find("'");
+				if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v' and (termino.at(i)==termino.at(n-1) or termino.at(i+2)==termino.at(n-1) )){
 				string1=termino.substr(0,(termino.length()-(termino.length()-i)));
 				if(termino.at(i+1)=='^'){
 					caracter='0';
@@ -178,33 +185,38 @@ string reduccion(string termino){
 
 			}
 		}
-
-		if(termino.length()>2){
-    	if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v'){
-    		string1=termino.substr(0,(termino.length()-(termino.length()-i)));
-    		caracter=termino.substr(i,1);
-    		if(i+3!=termino.length()){
-    		termino=string1+caracter+termino.substr(i+3,termino.length());
-			}
-			else{
-				termino=string1+caracter;
+					if(termino.length()>2){
+    					if(termino.at(i-2)==termino.at(i) and termino.at(i)!='^' and termino.at(i)!='v'){
+    					string1=termino.substr(0,(termino.length()-(termino.length()-(i-2)))); 
+    					caracter=termino.substr(i,1);
+    						if(i+1!=termino.length()){
+    						termino=string1+caracter+termino.substr(i+1,termino.length());
+							}
+							else{
+							termino=string1+caracter;
 			}
 		}
 	}
 		if(termino.length()>3){
-				if(termino.at(i)==termino.at(i+4) and termino.at(i)!='^' and termino.at(i)!='v'){
-    		string1=termino.substr(0,(termino.length()-(termino.length()-i)));
-    		if(i+5!=termino.length()){
-    		termino=string1+caracter+termino.substr(i+5,termino.length());
+				if(termino.at(i-2)==termino.at(i) and termino.at(i)!='^' and termino.at(i)!='v'){
+    				string1=termino.substr(0,(termino.length()-(termino.length()-(i-2))));
+    				caracter=termino.substr(i,1);
+    		if(i+1!=termino.length()){
+    		termino=string1+caracter+termino.substr(i+1,termino.length());
 			}
 			else{
 				termino=string1+caracter;
 			}
 			}
 		}
-		
-		}
 		termino=reduccion(termino);
+			}
+    	
+
+		
+	}
+		}
+	}
 	}
 
 	return termino;
@@ -215,7 +227,6 @@ string operar(string termino, int numvar,int y){
 	termino=reduccion(termino);
 	termino=binarizacion(termino,numvar,y);
 	termino=aplicarnegacion(termino);
-	termino=reduccion(termino);
 	termino=prioridadAND(termino);
 	termino=resolverOR(termino);
 	
