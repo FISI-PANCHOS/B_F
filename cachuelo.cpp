@@ -153,23 +153,69 @@ string resolverOR(string termino){
 	return termino;
 }
 string reduccion(string termino){
+	int n;
+	string copia;
 	string string1,caracter;
+	if(termino.length()>1){
     for(int i=0;i<termino.length();i++){
+    	if(termino.find("'") != string::npos){
+			n=termino.find("'");
+			if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v' and (termino.at(i)==termino.at(n-1) or termino.at(i+2)==termino.at(n-1) )){
+				string1=termino.substr(0,(termino.length()-(termino.length()-i)));
+				if(termino.at(i+1)=='^'){
+					caracter='0';
+				}
+				else{
+					caracter='1';
+				}
+				
+			if(i+4!=termino.length()){
+    		termino=string1+caracter+termino.substr(i+4,termino.length());
+			}
+			else{
+				termino=string1+caracter;
+			}	
+
+			}
+		}
+
+		if(termino.length()>2){
     	if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v'){
-    		string1=termino.substr(0,termino.length()-n);
-    		caracter=termino.substr(n+2,1);
-    		termino=string1+caracter+termino.substr(n+5,termino.length());
+    		string1=termino.substr(0,(termino.length()-(termino.length()-i)));
+    		caracter=termino.substr(i,1);
+    		if(i+3!=termino.length()){
+    		termino=string1+caracter+termino.substr(i+3,termino.length());
+			}
+			else{
+				termino=string1+caracter;
+			}
 		}
 	}
+		if(termino.length()>3){
+				if(termino.at(i)==termino.at(i+4) and termino.at(i)!='^' and termino.at(i)!='v'){
+    		string1=termino.substr(0,(termino.length()-(termino.length()-i)));
+    		if(i+5!=termino.length()){
+    		termino=string1+caracter+termino.substr(i+5,termino.length());
+			}
+			else{
+				termino=string1+caracter;
+			}
+			}
+		}
+		
+		}
+		termino=reduccion(termino);
+	}
+
 	return termino;
 }
 
 string operar(string termino, int numvar,int y){
 	
-	//termino=reduccion(termino);
-
+	termino=reduccion(termino);
 	termino=binarizacion(termino,numvar,y);
 	termino=aplicarnegacion(termino);
+	termino=reduccion(termino);
 	termino=prioridadAND(termino);
 	termino=resolverOR(termino);
 	
