@@ -61,20 +61,32 @@ int numvariables(string funcion){
 	}
 	return numvar;
 }
-char valoresdeverdad(int cont,int restantes,int x,int y){
-	char matriz[16][4];
+char valoresdeverdad(int cont,int variables,int restante,int x,int y){
 	int i=0;
-	for(int s=0;s<pow(2,cont);s++){
-
-			if(i<pow(2,restantes)/2){
+	char matriz[16][5];
+	int a=0;
+	int t,w=0;
+	if(restante>0){
+		t=pow(2,cont);
+			for(int s=0;s<t;s++){
+			restante=(variables-cont);
+			w=pow(2,restante);		
+			while(a!=w){
+				while(a<(w/2)){
 				matriz[i][x]='0';
+				a++;
+				i++;
 			}
-			else{
+			while(a>=(w/2)and a<w){
 				matriz[i][x]='1';
+				a++;
+				i++;
+				}
 			}
-			i++;
+			a=0;
 		}
-	
+		}
+
 	return matriz[y][x];
 }
 string binarizacion(string termino,int numvariables, int y){
@@ -83,23 +95,23 @@ string binarizacion(string termino,int numvariables, int y){
 	restantes=numvariables;
 	for(int i=0;i<termino.length();i++){
 		if(termino.at(i)=='X'){
-			termino.at(i)=valoresdeverdad(cont,restantes,x,y);
-			numvariables--;
+			termino.at(i)=valoresdeverdad(cont,numvariables,restantes,x,y);
+			restantes--;
 			cont++;
 		}
 		if(termino.at(i)=='Y'){
-			termino.at(i)=valoresdeverdad(cont,restantes,Y,y);
-			numvariables--;
+			termino.at(i)=valoresdeverdad(cont,numvariables,restantes,Y,y);
+			restantes--;
 			cont++;
 		}
 		if(termino.at(i)=='Z'){
-			termino.at(i)=valoresdeverdad(cont,restantes,z,y);
-			numvariables--;
+			termino.at(i)=valoresdeverdad(cont,numvariables,restantes,z,y);
+			restantes--;
 			cont++;
 		}
 		if(termino.at(i)=='W'){
-			termino.at(i)=valoresdeverdad(cont,restantes,w,y);
-			numvariables--;
+			termino.at(i)=valoresdeverdad(cont,numvariables,restantes,w,y);
+			restantes--;
 			cont++;
 		}
 	}
@@ -107,21 +119,24 @@ string binarizacion(string termino,int numvariables, int y){
 }
 string prioridadAND(string termino){
 	string string1,string2,string3;
-	int n;
 	string caracter;
+	int n;
 	while(termino.find("^") != string::npos){
 		n=termino.find("^");
-		string1=termino.substr(0,n-2);
-		caracter=productoAND(termino.at(n-2),termino.at(n+2));
-		string2=termino.substr(n+2,termino.length());
+		string1=termino.substr(0,(termino.length()-n));
+		caracter=productoAND(termino.at(n-1),termino.at(n+1));
 		string1=string1+caracter;
-		termino=string1+string2;
-		
+		if(n+2!=termino.length()){
+		termino=string1+termino.substr(n+2,termino.length());
+		}
+		else{
+			termino=string1;
+		}
+		termino=prioridadAND(termino);
 	}
 	return termino;
 }
 string resolverOR(string termino){
-	string string1,string2,string3;
 	string caracter;
 	int n;
 	while(termino.find("v") != string::npos){
@@ -129,20 +144,26 @@ string resolverOR(string termino){
 		caracter=sumaOR(termino.at(n-1),termino.at(n+1));
 		if(n+2!=termino.length()){
 		termino=caracter+termino.substr(n+2,termino.length());
-			
-		termino=string1+string2;
 		}
 		else{
 			termino=caracter;
 		}
-		
-		
+		termino=resolverOR(termino);
 	}
 	return termino;
 }
-/*string reduccion(string termino){
-	
-}*/
+string reduccion(string termino){
+	string string1,caracter;
+    for(int i=0;i<termino.length();i++){
+    	if(termino.at(i)==termino.at(i+2) and termino.at(i)!='^' and termino.at(i)!='v'){
+    		string1=termino.substr(0,termino.length()-n);
+    		caracter=termino.substr(n+2,1);
+    		termino=string1+caracter+termino.substr(n+5,termino.length());
+		}
+	}
+	return termino;
+}
+
 string operar(string termino, int numvar,int y){
 	
 	//termino=reduccion(termino);
@@ -183,36 +204,48 @@ string separarterminos(string funcion, int y){
 	return operar(funcion,n,y);
 }
 void llenarmatrices(string ecuacion){
-	int n;
-	n=numvariables(ecuacion);
+	int cont=0,i=0;
+	int variables,restante=1;
 	string matriz[16][5];
-	int i=0,cont=0;
-	while(cont<n){
-		for(int j=0;j<n;j++){
-			for(int i=0;i<pow(2,n);i++){
-				for(int s=0;s<pow(2,cont);s++){
-					for(int contador=0;contador<pow(2,n-cont);contador++){
-						
-					}
-					
-				}
-			
+	int a=0;
+	int t,w=0;
+	variables=numvariables(ecuacion);
+
+	for(int j=0;j<variables;j++){
+		if(restante>0){
+		t=pow(2,cont);
+			for(int s=0;s<t;s++){
+			restante=(variables-cont);
+			w=pow(2,restante);
+			while(a!=w){
+				while(a<(w/2)){
+				matriz[i][j]="0";
+				a++;
+				i++;
 			}
-			cont++;
+			while(a>=(w/2)and a<w){
+				matriz[i][j]="1";
+				a++;
+				i++;
+				}
+			}
+			a=0;
 		}
-
+		}
+			i=0;
+		cont++;
 	}
-	for(int cont2=0;cont2<pow(2,n);cont2++){
-		matriz[cont2][n]=separarterminos(ecuacion,cont2);
+	for(int cont2=0;cont2<pow(2,variables);cont2++){
+		matriz[cont2][variables]=separarterminos(ecuacion,cont2);
 	}
 
-	for(int a=0;a<pow(2,n);a++){
-		for(int b=0;b<n+1;b++){
-			cout<<matriz[a][b];
+	for(int e=0;e<pow(2,variables);e++){
+		for(int b=0;b<variables+1;b++){
+			cout<<matriz[e][b];
 		}
 		cout<<endl;
 	}
-}
+	}
 void leerfuncion(){
 	int y=0,n=0;
 	string ecuacion;
