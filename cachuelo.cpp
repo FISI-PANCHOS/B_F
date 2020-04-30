@@ -170,64 +170,54 @@ string reduccion(string termino){
 					caracter='1';
 				}
 				
-			if(i+4!=termino.length()){
-    		termino=string1+caracter+termino.substr(i+4,termino.length());
-			}
-			else{
+				if(i+4!=termino.length()){
+    			termino=string1+caracter+termino.substr(i+4,termino.length());
+				}
+				else{
 				termino=string1+caracter;
-			}	
+				}	
 
-			}
-		}
-					if(termino.length()>2){
-    					if(termino.at(i-2)==termino.at(i) and termino.at(i)!='^' and termino.at(i)!='v'){
-    					string1=termino.substr(0,(termino.length()-(termino.length()-(i-2)))); 
-    					caracter=termino.substr(i,1);
-    						if(i+1!=termino.length()){
-    						termino=string1+caracter+termino.substr(i+1,termino.length());
-							}
-							else{
-							termino=string1+caracter;
-			}
-		}
-	}
-		if(termino.length()>3){
+				}
+				}
+				if(termino.length()>2){
+    			if(termino.at(i-2)==termino.at(i) and termino.at(i)!='^' and termino.at(i)!='v'){
+    			string1=termino.substr(0,(termino.length()-(termino.length()-(i-2)))); 
+    			caracter=termino.substr(i,1);
+    				if(i+1!=termino.length()){
+    				termino=string1+caracter+termino.substr(i+1,termino.length());
+					}
+					else{
+					termino=string1+caracter;
+					}
+				}
+				}
+				if(termino.length()>3){
 				if(termino.at(i-2)==termino.at(i) and termino.at(i)!='^' and termino.at(i)!='v'){
     				string1=termino.substr(0,(termino.length()-(termino.length()-(i-2))));
     				caracter=termino.substr(i,1);
-    		if(i+1!=termino.length()){
-    		termino=string1+caracter+termino.substr(i+1,termino.length());
-			}
-			else{
-				termino=string1+caracter;
-			}
+    				if(i+1!=termino.length()){
+    				termino=string1+caracter+termino.substr(i+1,termino.length());
+					}
+					else{
+					termino=string1+caracter;
+					}
+				}
+				}
+				termino=reduccion(termino);
 			}
 		}
-		termino=reduccion(termino);
-			}
-    	
-
-		
 	}
-		}
 	}
 	}
 
 	return termino;
 }
 string operar(string termino, int numvar,int y){
-	
 	termino=reduccion(termino);
-//	cout<<termino<<endl;
 	termino=binarizacion(termino,numvar,y);
-//	cout<<termino<<endl;
 	termino=aplicarnegacion(termino);
-	//cout<<termino<<endl;
 	termino=prioridadAND(termino);
-	//cout<<termino<<endl;
 	termino=resolverOR(termino);
-	//cout<<termino<<endl;
-	
 	return termino;
 	}
 string separarterminos(string funcion, int y){
@@ -244,19 +234,16 @@ string separarterminos(string funcion, int y){
 		}
 		if(funcion.at(cont)==')'){
     		posicion2=cont;
-    	//	cout<<"La posicion 2 es "<<cont<<endl;
-    	//	if(posicion2 != 0){
 				diferencia=(posicion2-posicion1);
 				string1=funcion.substr(0, posicion1);
-				termino=funcion.substr(posicion1+1, diferencia-1);//cout<<termino<<" es el termino"<<endl;
-				funcion=funcion.substr(posicion2+1, funcion.length());//cout<<funcion<<" es la funcion"<<endl;
+				termino=funcion.substr(posicion1+1, diferencia-1);
+				funcion=funcion.substr(posicion2+1, funcion.length());
 				string2=operar(termino,n,y);
 				funcion=string1+string2+funcion;
 				posicion2=0;
 				cont=0;
     			cout<<"Terminaste el termino y la funcion es "<<funcion<<endl;
     			funcion=separarterminos(funcion,y);
-		//	}
 		}
 		else{cont++;
 		}
@@ -271,6 +258,7 @@ void llenarmatrices(string ecuacion){
 	int cont=0,i=0;
 	int variables,restante=1;
 	string matriz[16][5];
+	string respuestas[16];
 	int a=0;
 	int t,w=0;
 	variables=numvariables(ecuacion);
@@ -302,7 +290,9 @@ void llenarmatrices(string ecuacion){
 	for(int cont2=0;cont2<pow(2,variables);cont2++){
 		matriz[cont2][variables]=separarterminos(ecuacion,cont2);
 	}
-
+	for(int z=0;z<pow(2,variables);z++){
+		respuestas[z]=matriz[z][variables]; //German ctmre 
+	}
 	for(int e=0;e<pow(2,variables);e++){
 		for(int b=0;b<variables+1;b++){
 			cout<<matriz[e][b];
