@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <math.h>
 #include <string>
@@ -127,12 +126,7 @@ string prioridadAND(string termino){
 		string1=termino.substr(0,(termino.length()-n-2));
 		caracter=productoAND(termino.at(n-1),termino.at(n+1));
 		string1=string1+caracter;
-		//if(n+2!=termino.length()){
-	//	termino=string1+termino.substr(n+2,termino.length());
-	//	}
-	//	else{
 			termino=string1;
-//		}
 		termino=prioridadAND(termino);
 	}
 	return termino;
@@ -221,44 +215,57 @@ string reduccion(string termino){
 
 	return termino;
 }
-
 string operar(string termino, int numvar,int y){
 	
 	termino=reduccion(termino);
+//	cout<<termino<<endl;
 	termino=binarizacion(termino,numvar,y);
+//	cout<<termino<<endl;
 	termino=aplicarnegacion(termino);
+	//cout<<termino<<endl;
 	termino=prioridadAND(termino);
+	//cout<<termino<<endl;
 	termino=resolverOR(termino);
+	//cout<<termino<<endl;
 	
 	return termino;
 	}
 string separarterminos(string funcion, int y){
-	int s,posicion1=0,posicion2=0,cont=0;
-	int n;
+	int posicion1=0,posicion2=0;
+	int n,cont=0;
+	int contando=0;
 	int diferencia=0;
 	string string1,string2,termino;
 	n=numvariables(funcion);
-	
-	for(int i=0;i<funcion.length();i++){
-		if(funcion[i]=='('){
-    		posicion1=i;
+	while(funcion.find('(') != string::npos and funcion.find(')') != string::npos){contando++;cout<<"Es la vez numero "<<contando<<" que se ejecuta"<<endl;
+		cout<<"El caracter es "<<funcion.at(cont)<<endl;
+		if(funcion.at(cont)=='('){
+    		posicion1=cont;
 		}
-		if(funcion[i]==')'){
-    		posicion2=i;
-    		
+		if(funcion.at(cont)==')'){
+    		posicion2=cont;
+    	//	cout<<"La posicion 2 es "<<cont<<endl;
+    	//	if(posicion2 != 0){
+				diferencia=(posicion2-posicion1);
+				string1=funcion.substr(0, posicion1);
+				termino=funcion.substr(posicion1+1, diferencia-1);//cout<<termino<<" es el termino"<<endl;
+				funcion=funcion.substr(posicion2+1, funcion.length());//cout<<funcion<<" es la funcion"<<endl;
+				string2=operar(termino,n,y);
+				funcion=string1+string2+funcion;
+				posicion2=0;
+				cont=0;
+    			cout<<"Terminaste el termino y la funcion es "<<funcion<<endl;
+    			funcion=separarterminos(funcion,y);
+		//	}
 		}
-		if(posicion2 != 0){
-			diferencia=(posicion2-posicion1);
-			termino=funcion.substr(posicion1+1, diferencia-1);
-			funcion=funcion.substr(posicion2+1, funcion.length());
-			string1=operar(termino,n,y);
-			funcion=string1+funcion;
-			posicion2=0;
+		else{cont++;
 		}
+		
+
 	}
 
 	
-	return operar(funcion,n,y);
+return operar(funcion,n,y);
 }
 void llenarmatrices(string ecuacion){
 	int cont=0,i=0;
