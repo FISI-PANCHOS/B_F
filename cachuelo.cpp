@@ -124,15 +124,15 @@ string prioridadAND(string termino){
 	int n;
 	while(termino.find("^") != string::npos){
 		n=termino.find("^");
-		string1=termino.substr(0,(termino.length()-n));
+		string1=termino.substr(0,(termino.length()-n-2));
 		caracter=productoAND(termino.at(n-1),termino.at(n+1));
 		string1=string1+caracter;
-		if(n+2!=termino.length()){
-		termino=string1+termino.substr(n+2,termino.length());
-		}
-		else{
+		//if(n+2!=termino.length()){
+	//	termino=string1+termino.substr(n+2,termino.length());
+	//	}
+	//	else{
 			termino=string1;
-		}
+//		}
 		termino=prioridadAND(termino);
 	}
 	return termino;
