@@ -1,9 +1,69 @@
 #include "QuineMcClusky.h"
+#include "Tabla.h"
 
-QuineMcClusky::QuineMcClusky(int var)
-{
-	VARIABLES=var;
-  	dontcares.append(var,'-');
+QuineMcClusky::QuineMcClusky(string funcion, char n){
+	n='y';
+	Tabla tab(funcion,n);
+	VARIABLES=numvariables(funcion);
+  	dontcares.append(numvariables(funcion),'-');
+  	int num,cont3=0;
+	vector<string> miniterminos;
+	string temp,cadena;
+	stringstream ss; 
+    for(int cont2=0;cont2<pow(2,VARIABLES);cont2++){
+		cont3=0;
+		if(tab.separarterminos(cont3,funcion,cont2)=="1"){
+			ss.str("");
+			ss<<cont2;
+			cadena=ss.str();
+			temp=temp+cadena;
+			if(cont2<pow(2,VARIABLES)-1){
+			temp=temp+",";
+			}
+		}	
+	}
+      //splitting the input
+      istringstream f(temp);
+      string s;
+      while (getline(f, s, ','))
+      {
+          //cout << s << endl;
+         int t=atoi(s.data());
+         miniterminos.push_back(pad(decToBin(t)));
+      }
+
+      sort(miniterminos.begin(),miniterminos.end());
+
+      do
+      {
+         miniterminos=reduce(miniterminos);
+         sort(miniterminos.begin(),miniterminos.end());
+      }while(!VectorsEqual(miniterminos,reduce(miniterminos)));
+
+
+      int i;
+      cout << "La expresion reducida es" << endl;
+      for (i=0;i<miniterminos.size()-1; i++)
+          cout <<getValue(miniterminos[i],funcion)<<"v";
+      cout<<getValue(miniterminos[i],funcion)<<endl;
+  	
+  	
+}
+int QuineMcClusky::numvariables(string funcion){
+	int numvar=0;
+	if(funcion.find("X") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("Y") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("Z") != string::npos){
+		numvar++;
+	}
+	if(funcion.find("W") != string::npos){
+		numvar++;
+	}
+	return numvar;
 }
 vector<string> QuineMcClusky::getVars(string ecuacion){	
 	int n=0,cont=0;
@@ -34,8 +94,7 @@ vector<string> QuineMcClusky::getVars(string ecuacion){
 
    return v;
 }
-string QuineMcClusky::decToBin(int n)
-{
+string QuineMcClusky::decToBin(int n){
    if ( n == 0 )
        return n+"";
 
@@ -44,25 +103,21 @@ string QuineMcClusky::decToBin(int n)
    else
        return decToBin(n / 2) + "1";
 }
-string QuineMcClusky::pad(string bin)
-{
+string QuineMcClusky::pad(string bin){
    int max=VARIABLES-bin.length();
    for(int i=0; i<max; i++)
        bin="0"+bin;
    return bin;
 }
-bool QuineMcClusky::isGreyCode(string a,string b)
-{
+bool QuineMcClusky::isGreyCode(string a,string b){
    int flag=0;
-   for(int i=0;i<a.length();i++)
-   {
+   for(int i=0;i<a.length();i++){
        if(a[i]!=b[i])
         flag++;
    }
    return (flag==1);
 }
-string QuineMcClusky::replace_complements(string a,string b)
-{
+string QuineMcClusky::replace_complements(string a,string b){
    string temp="";
    for(int i=0;i<a.length();i++)
    if(a[i]!=b[i])
@@ -72,15 +127,13 @@ string QuineMcClusky::replace_complements(string a,string b)
 
    return temp;
 }
-bool QuineMcClusky::in_vector(vector<string> a,string b)
-{
+bool QuineMcClusky::in_vector(vector<string> a,string b){
    for(int i=0;i<a.size();i++)
      if(a[i].compare(b)==0)
       return true;
     return false;
 }
-vector<string> QuineMcClusky::reduce(vector<string> minterms)
-{
+vector<string> QuineMcClusky::reduce(vector<string> minterms){
 
 
       vector<string> newminterms;
@@ -114,27 +167,27 @@ vector<string> QuineMcClusky::reduce(vector<string> minterms)
    
        return newminterms;
 }
-string QuineMcClusky::getValue(string a,string ecuacion)
-{	vector<string> vars=this->getVars(ecuacion);
+string QuineMcClusky::getValue(string a,string ecuacion){	
+	vector<string> vars=this->getVars(ecuacion);
 
-   string temp ="";
+   	string temp ="";
 
-   if(a==dontcares)
+   	if(a==dontcares)
      return "1";
 
-   for(int i=0;i<a.length();i++)
+   	for(int i=0;i<a.length();i++)
    {
      if(a[i]!='-')
      {
         if(a[i]=='0'){
          temp=temp+vars[i]+"\'";
-         if(i<a.length()-1){
+         if(i<a.length()-1 and ecuacion.find('^') != string::npos ){
          	temp=temp+"^";
 		 }
    		}
         else{
          temp=temp+vars[i];
-         if(i<a.length()-1){
+         if(i<a.length()-1 and ecuacion.find('^') != string::npos ){
          	temp=temp+"^";
 		 }
    		}
@@ -142,8 +195,7 @@ string QuineMcClusky::getValue(string a,string ecuacion)
    }
    return temp;
 }
-bool QuineMcClusky::VectorsEqual(vector<string> a,vector<string> b)
-{
+bool QuineMcClusky::VectorsEqual(vector<string> a,vector<string> b){
    if(a.size()!=b.size())
       return false;
 

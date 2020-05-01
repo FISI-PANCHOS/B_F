@@ -1,9 +1,9 @@
 #include "Tabla.h"
 
-Tabla::Tabla(string ecuacion)
+Tabla::Tabla(string ecuacion,char a)
 {
 	int y=0,n=0;
-	llenarmatrices(ecuacion);
+	llenarmatrices(ecuacion,a);
 }
 string Tabla::productoAND(char a, char b){
 	if(a == b and a == '1'){
@@ -247,7 +247,8 @@ string Tabla::separarterminos(int &cont1, string funcion, int y){
 	
 return operar(cont1,funcion,n,restante,y);
 }
-void Tabla::llenarmatrices(string ecuacion){ //Aqui esta lo de los datos
+void Tabla::llenarmatrices(string ecuacion,char n){ //Aqui esta lo de los datos
+	if(n=='n'){
 	int cont=0,cont3=0,i=0;
 	int variables,restante=1;
 	string matriz[16][5];
@@ -299,8 +300,7 @@ void Tabla::llenarmatrices(string ecuacion){ //Aqui esta lo de los datos
 		cout<<endl;
 	} 
 	}
-
-
+}
 
 Tabla::~Tabla()
 {

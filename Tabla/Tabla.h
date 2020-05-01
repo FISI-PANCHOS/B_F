@@ -10,7 +10,7 @@ using namespace std;
 class Tabla
 {
 	public:
-		Tabla(string ecuacion);
+		Tabla(string ecuacion,char n);
 		string productoAND(char a, char b);
 		string sumaOR(char a, char b);
 		string negacion(char n);
@@ -23,7 +23,7 @@ class Tabla
 		string reduccion(string termino);
 		string operar(int &cont,string termino, int numvar,int &restantes, int y);
 		string separarterminos(int &cont1, string funcion, int y);
-		void llenarmatrices(string ecuacion);
+		void llenarmatrices(string ecuacion, char n);
 		void leerfuncion();
 		~Tabla();
 	protected:

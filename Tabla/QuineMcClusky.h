@@ -15,11 +15,12 @@
 
 using namespace std;
 class QuineMcClusky
-{int VARIABLES;
+{	int VARIABLES;
 		string dontcares;
 	public:
 		
-		QuineMcClusky(int var);
+		QuineMcClusky( string funcion,char n);
+		int numvariables(string funcion);
 		vector<string> getVars(string ecuacion);
 		string decToBin(int n);
 		string pad(string bin);
