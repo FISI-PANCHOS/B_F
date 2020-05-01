@@ -126,10 +126,18 @@ string QuineMcClusky::getValue(string a,string ecuacion)
    {
      if(a[i]!='-')
      {
-        if(a[i]=='0')
+        if(a[i]=='0'){
          temp=temp+vars[i]+"\'";
-        else
+         if(i<a.length()-1){
+         	temp=temp+"^";
+		 }
+   		}
+        else{
          temp=temp+vars[i];
+         if(i<a.length()-1){
+         	temp=temp+"^";
+		 }
+   		}
      }
    }
    return temp;
