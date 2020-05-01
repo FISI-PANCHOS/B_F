@@ -21,14 +21,14 @@ class QuineMcClusky
 		
 		QuineMcClusky( string funcion,char n);
 		int numvariables(string funcion);
-		vector<string> getVars(string ecuacion);
-		string decToBin(int n);
+		vector<string> obtener_variables(string ecuacion);
+		string decimal_a_binario(int n);
 		string pad(string bin);
 		bool isGreyCode(string a,string b);
-		string replace_complements(string a,string b);
+		string remplazar_complementos(string a,string b);
 		bool in_vector(vector<string> a,string b);
-		vector<string> reduce(vector<string> minterms);
-		string getValue(string a,string ecuacion);
+		vector<string> reducir(vector<string> minterms);
+		string obternervalor(string a,string ecuacion);
 		bool VectorsEqual(vector<string> a,vector<string> b);
 	protected:
 };

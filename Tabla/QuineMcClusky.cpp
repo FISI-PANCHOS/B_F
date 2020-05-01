@@ -29,23 +29,23 @@ QuineMcClusky::QuineMcClusky(string funcion, char n){
       {
           //cout << s << endl;
          int t=atoi(s.data());
-         miniterminos.push_back(pad(decToBin(t)));
+         miniterminos.push_back(pad(decimal_a_binario(t)));
       }
 
       sort(miniterminos.begin(),miniterminos.end());
 
       do
       {
-         miniterminos=reduce(miniterminos);
+         miniterminos=reducir(miniterminos);
          sort(miniterminos.begin(),miniterminos.end());
-      }while(!VectorsEqual(miniterminos,reduce(miniterminos)));
+      }while(!VectorsEqual(miniterminos,reducir(miniterminos)));
 
 
       int i;
       cout << "La expresion reducida es" << endl;
       for (i=0;i<miniterminos.size()-1; i++)
-          cout <<getValue(miniterminos[i],funcion)<<"v";
-      cout<<getValue(miniterminos[i],funcion)<<endl;
+          cout <<obternervalor(miniterminos[i],funcion)<<"v";
+      cout<<obternervalor(miniterminos[i],funcion)<<endl;
   	
   	
 }
@@ -65,7 +65,7 @@ int QuineMcClusky::numvariables(string funcion){
 	}
 	return numvar;
 }
-vector<string> QuineMcClusky::getVars(string ecuacion){	
+vector<string> QuineMcClusky::obtener_variables(string ecuacion){	
 	int n=0,cont=0;
 	string lista[4];
 
@@ -94,30 +94,30 @@ vector<string> QuineMcClusky::getVars(string ecuacion){
 
    return v;
 }
-string QuineMcClusky::decToBin(int n){
+string QuineMcClusky::decimal_a_binario(int n){
    if ( n == 0 )
        return n+"";
 
    if ( n % 2 == 0 )
-       return decToBin(n / 2) + "0";
+       return decimal_a_binario(n / 2) + "0";
    else
-       return decToBin(n / 2) + "1";
+       return decimal_a_binario(n / 2) + "1";
 }
-string QuineMcClusky::pad(string bin){
-   int max=VARIABLES-bin.length();
+string QuineMcClusky::pad(string binario){
+   int max=VARIABLES-binario.length();
    for(int i=0; i<max; i++)
-       bin="0"+bin;
-   return bin;
+       binario="0"+binario;
+   return binario;
 }
 bool QuineMcClusky::isGreyCode(string a,string b){
-   int flag=0;
+   int cont=0;
    for(int i=0;i<a.length();i++){
        if(a[i]!=b[i])
-        flag++;
+        cont++;
    }
-   return (flag==1);
+   return (cont==1);
 }
-string QuineMcClusky::replace_complements(string a,string b){
+string QuineMcClusky::remplazar_complementos(string a,string b){
    string temp="";
    for(int i=0;i<a.length();i++)
    if(a[i]!=b[i])
@@ -133,7 +133,7 @@ bool QuineMcClusky::in_vector(vector<string> a,string b){
       return true;
     return false;
 }
-vector<string> QuineMcClusky::reduce(vector<string> minterms){
+vector<string> QuineMcClusky::reducir(vector<string> minterms){
 
 
       vector<string> newminterms;
@@ -149,8 +149,8 @@ vector<string> QuineMcClusky::reduce(vector<string> minterms){
                {
                   checked[i]=1;
                   checked[j]=1;
-                  if(!in_vector(newminterms,replace_complements(minterms[i],minterms[j])))
-                     newminterms.push_back(replace_complements(minterms[i],minterms[j]));
+                  if(!in_vector(newminterms,remplazar_complementos(minterms[i],minterms[j])))
+                     newminterms.push_back(remplazar_complementos(minterms[i],minterms[j]));
                }
           }
       }
@@ -167,8 +167,8 @@ vector<string> QuineMcClusky::reduce(vector<string> minterms){
    
        return newminterms;
 }
-string QuineMcClusky::getValue(string a,string ecuacion){	
-	vector<string> vars=this->getVars(ecuacion);
+string QuineMcClusky::obternervalor(string a,string ecuacion){	
+	vector<string> vars=this->obtener_variables(ecuacion);
 
    	string temp ="";
 
