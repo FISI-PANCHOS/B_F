@@ -2,35 +2,44 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <stdio.h>
 #include <string.h>
+#include <sstream>
 #include <list>
 #include "Tabla.h"
 #include "QuineMcClusky.h"
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
+//Esto es lo que voy trabajando hasta aghora en el main, no va a compilar, aun tengo que arreglar una cosita xdd
 int main(int argc, char** argv) {
-	int num;
+	int num,cont3=0;
 	vector<string> miniterminos;
-	string ecuacion;
+	string ecuacion,temp,cadena;
+	stringstream ss;
 	printf("inserta tu frase plox: ");
     getline(cin,ecuacion);	
     Tabla tab(ecuacion);
 	num=tab.numvariables(ecuacion);    
     QuineMcClusky  q(num);
-	miniterminos=tab.llenarmatrices(ecuacion);
-      string temp="";
-      cout<<"Enter the minterms(RANGE=0-"<<pow(2,num)-1<<") separated by comma:"<<endl;
-      cin>>temp;
-
+    for(int cont2=0;cont2<pow(2,num);cont2++){
+		cont3=0;
+		if(tab.separarterminos(cont3,ecuacion,cont2)=="1"){
+			ss.str("");
+			ss<<cont2;
+			cadena=ss.str();
+			temp=temp+cadena;
+			if(cont2<pow(2,num)-1){
+			temp=temp+",";
+			}
+		}	
+	}
       //splitting the input
-      vector<string> minterms;
       istringstream f(temp);
       string s;
       while (getline(f, s, ','))
       {
           //cout << s << endl;
          int t=atoi(s.data());
-         minterms.push_back(q.pad(q.decToBin(t)));
+         miniterminos.push_back(q.pad(q.decToBin(t)));
       }
 
       sort(miniterminos.begin(),miniterminos.end());
@@ -45,8 +54,8 @@ int main(int argc, char** argv) {
       int i;
       cout << "The reduced boolean expression in SOP form:" << endl;
       for (i=0;i<miniterminos.size()-1; i++)
-          cout <<q.getValue(miniterminos[i])<<"+";
-      cout<<q.getValue(miniterminos[i])<<endl;
+          cout <<q.getValue(miniterminos[i],ecuacion)<<"v";
+      cout<<q.getValue(miniterminos[i],ecuacion)<<endl;
 
 	return 0;
 }

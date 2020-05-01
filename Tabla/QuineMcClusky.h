@@ -20,14 +20,14 @@ class QuineMcClusky
 	public:
 		
 		QuineMcClusky(int var);
-		vector<string> getVars();
+		vector<string> getVars(string ecuacion);
 		string decToBin(int n);
 		string pad(string bin);
 		bool isGreyCode(string a,string b);
 		string replace_complements(string a,string b);
 		bool in_vector(vector<string> a,string b);
 		vector<string> reduce(vector<string> minterms);
-		string getValue(string a);
+		string getValue(string a,string ecuacion);
 		bool VectorsEqual(vector<string> a,vector<string> b);
 	protected:
 };

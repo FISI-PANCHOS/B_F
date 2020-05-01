@@ -247,7 +247,7 @@ string Tabla::separarterminos(int &cont1, string funcion, int y){
 	
 return operar(cont1,funcion,n,restante,y);
 }
-string Tabla::llenarmatrices(string ecuacion){ //Aqui esta lo de los datos
+void Tabla::llenarmatrices(string ecuacion){ //Aqui esta lo de los datos
 	int cont=0,cont3=0,i=0;
 	int variables,restante=1;
 	string matriz[16][5];
@@ -297,7 +297,7 @@ string Tabla::llenarmatrices(string ecuacion){ //Aqui esta lo de los datos
 			cout<<matriz[e][b];
 		}
 		cout<<endl;
-	} vector<string> miniterminos;
+	} 
 	}
 
 

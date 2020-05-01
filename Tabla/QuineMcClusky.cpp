@@ -5,12 +5,32 @@ QuineMcClusky::QuineMcClusky(int var)
 	VARIABLES=var;
   	dontcares.append(var,'-');
 }
-vector<string> QuineMcClusky::getVars()
-{
+vector<string> QuineMcClusky::getVars(string ecuacion){	
+	int n=0,cont=0;
+	string lista[4];
+
+		if(ecuacion.find("X") != string::npos){
+			lista[cont]="X";
+			cont++;
+		}
+		if(ecuacion.find("Y") != string::npos){
+			lista[cont]="Y";
+			cont++;
+		}
+		if(ecuacion.find("Z") != string::npos){
+			lista[cont]="Z";
+			cont++;
+		}
+		if(ecuacion.find("W") != string::npos){
+			lista[cont]="W";
+			cont++;
+		}
+
    vector<string> v;
-   string letters[]={"X","Y","Z","W"};
-   for(int i=0;i<this->VARIABLES;i++)
-    v.push_back(letters[i]);
+   v.clear();
+   for(int i=0;i<this->VARIABLES;i++){
+    	v.push_back(lista[i]);
+	} 
 
    return v;
 }
@@ -61,9 +81,7 @@ bool QuineMcClusky::in_vector(vector<string> a,string b)
 }
 vector<string> QuineMcClusky::reduce(vector<string> minterms)
 {
-/*for (int i=0; i<minterms.size(); i++)
-       cout << minterms[i]<<endl;
-       cout <<endl;*/
+
 
       vector<string> newminterms;
 
@@ -96,10 +114,11 @@ vector<string> QuineMcClusky::reduce(vector<string> minterms)
    
        return newminterms;
 }
-string QuineMcClusky::getValue(string a)
-{
-   string temp="";
-   vector<string> vars=this->getVars();
+string QuineMcClusky::getValue(string a,string ecuacion)
+{	vector<string> vars=this->getVars(ecuacion);
+
+   string temp ="";
+
    if(a==dontcares)
      return "1";
 
